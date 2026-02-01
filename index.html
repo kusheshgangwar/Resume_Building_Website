@@ -62,10 +62,12 @@
 .resume-header h1{
   margin:0;
   font-size:26px;
+  text-align:center;
 }
 .resume-header p{
   margin:4px 0;
   font-size:14px;
+  text-align:center;
 }
 .resume-block{
   margin-top:15px;
@@ -90,7 +92,7 @@
 <body>
 <header>
   <h1>Professional Resume Builder</h1>
-  <p>All fields mandatory • ATS-friendly resume</p>
+  <p>ATS-friendly resume</p>
 </header><div class="container">
   <!-- FORM -->
   <div class="form-section">
@@ -170,7 +172,9 @@
 </div>
 
   </div>
-</div><script>
+</div><footer style="text-align:center; padding:15px; background:#0f172a; color:#fff; font-size:14px;">
+  © 2026 Professional Resume Builder | All Rights Reserved | Developed by DeveloperWala....
+</footer><script>
   function generateResume(){
     const fields=[
       'name','email','phone','city','summary','degree','college','year','skills','role','experience','projectTitle','projectDesc'
@@ -196,4 +200,4 @@
     window.print();
   }
 </script></body>
-  </html>
+</html>
