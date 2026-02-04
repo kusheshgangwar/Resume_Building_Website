@@ -555,10 +555,52 @@
 
     function downloadResume(){
       if(!collectAndValidate()) return;
-      // before printing, ensure preview is updated
+      // ensure preview is current
       updatePreview();
-      // Trigger print (user can save as PDF)
-      window.print();
+
+      // Gather head styles (style tags and stylesheet links) to include in print window
+      const headNodes = Array.from(document.head.querySelectorAll('link[rel="stylesheet"], style, link[href*="fonts.googleapis.com"]'));
+      const headHtml = headNodes.map(n => n.outerHTML).join('\n');
+
+      const resumeHtml = document.getElementById('resume').outerHTML;
+      const docTitle = (fields.name.value.trim() || 'Resume').replace(/[^a-z0-9 _-]/gi, '');
+
+      const html = `<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>${docTitle}</title>
+  ${headHtml}
+  <style>
+    /* Ensure clean print layout */
+    @page { size: A4; margin: 20mm; }
+    html,body{height:100%; margin:0; padding:0; background:#fff; color:#0f172a; font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;}
+    .paper{background:#fff; padding:0; border:0; box-shadow:none; width:100%;}
+    /* Reduce font-smoothing artifacts in print */
+    body { -webkit-print-color-adjust: exact; }
+  </style>
+</head>
+<body>
+  ${resumeHtml}
+</body>
+</html>`;
+
+      const w = window.open('', '_blank');
+      if (!w) {
+        alert('Popup blocked. Please allow popups for this site to download the resume.');
+        return;
+      }
+      w.document.open();
+      w.document.write(html);
+      w.document.close();
+      w.focus();
+
+      // Delay slightly to allow fonts/styles to load in the new window, then print and close
+      setTimeout(() => {
+        w.print();
+        // Closing is optional; some browsers prevent it. Attempt to close.
+        try { w.close(); } catch (e) { /* ignore */ }
+      }, 600);
     }
 
     // Modal handlers
@@ -578,4 +620,4 @@
   </script>
 
 </body>
-            </html>
+          </html>
