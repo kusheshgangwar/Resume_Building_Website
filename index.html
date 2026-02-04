@@ -1,224 +1,581 @@
-<!DOCTYPE html><html lang="en">
+<!doctype html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Advanced Resume Builder</title>
+
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+
   <style>
+    :root{
+      --bg: #f8fafc;
+      --card: #ffffff;
+      --muted: #6b7280;
+      --accent: #2563eb;
+      --accent-600: #1e40af;
+      --surface-shadow: 0 6px 22px rgba(15,23,42,0.08);
+      --radius: 12px;
+      --max-width: 1100px;
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
     body{
       margin:0;
-      font-family:Segoe UI, Arial, sans-serif;
-      background:#f1f5f9;
+      font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      background: linear-gradient(180deg, #eef2ff 0%, var(--bg) 60%);
+      color: #0f172a;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      padding:32px 16px;
+      display:flex;
+      justify-content:center;
     }
-    header{
-      background:#0f172a;
+
+    .wrap{
+      width:100%;
+      max-width:var(--max-width);
+    }
+
+    header.app-header{
+      background: linear-gradient(90deg, rgba(37,99,235,0.98), rgba(99,102,241,0.95));
       color:#fff;
-      padding:20px;
-      text-align:center;
+      padding:18px 20px;
+      border-radius:16px;
+      box-shadow: var(--surface-shadow);
+      display:flex;
+      align-items:center;
+      gap:16px;
     }
-    .container{
+    header.app-header .brand{
+      font-weight:700;
+      font-size:20px;
+      letter-spacing:0.2px;
+    }
+    header.app-header .subtitle{
+      opacity:0.9;
+      font-weight:500;
+      font-size:13px;
+    }
+
+    .grid{
       display:grid;
-      grid-template-columns:1.2fr 1fr;
+      grid-template-columns: 1fr 420px;
       gap:20px;
-      padding:20px;
+      margin-top:20px;
     }
-    .form-section,.resume-section{
-      background:#fff;
-      padding:20px;
-      border-radius:10px;
-      box-shadow:0 4px 10px rgba(0,0,0,.1);
+
+    /* Left: Form */
+    .panel{
+      background:var(--card);
+      border-radius:var(--radius);
+      padding:18px;
+      box-shadow: var(--surface-shadow);
     }
-    h2{
-      border-bottom:2px solid #e5e7eb;
-      padding-bottom:5px;
+
+    h2.section-title{
+      margin:0 0 8px 0;
+      font-size:16px;
+      color: #0f172a;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
     }
+    p.section-desc{margin:0 0 12px 0; color:var(--muted); font-size:13px}
+
     label{
-      font-weight:600;
       display:block;
       margin-top:12px;
+      font-size:13px;
+      color:#0f172a;
+      font-weight:600;
     }
-    input,textarea,select{
+    input[type="text"],
+    input[type="email"],
+    textarea,
+    select{
       width:100%;
-      padding:8px;
-      margin-top:5px;
-      border:1px solid #cbd5e1;
-      border-radius:6px;
+      padding:10px 12px;
+      margin-top:6px;
+      border:1px solid #e6edf3;
+      border-radius:8px;
+      background:#fff;
       font-size:14px;
+      color:#0f172a;
+      outline:none;
+      transition:box-shadow .12s, border-color .12s;
     }
-    textarea{resize:vertical}
-    button{
-      margin-top:15px;
-      padding:10px 15px;
-      border:none;
-      border-radius:6px;
-      background:#2563eb;
+    input:focus, textarea:focus{
+      border-color:var(--accent);
+      box-shadow:0 4px 18px rgba(37,99,235,0.08);
+    }
+    textarea{min-height:76px; resize:vertical}
+
+    .row{
+      display:flex;
+      gap:12px;
+      align-items:center;
+    }
+    .row .col{flex:1}
+
+    .muted{color:var(--muted); font-size:13px}
+
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:10px 14px;
+      background:var(--accent);
       color:#fff;
-      font-size:15px;
+      border:none;
+      border-radius:10px;
       cursor:pointer;
+      font-weight:600;
+      font-size:14px;
+      margin-top:12px;
     }
-    button:hover{background:#1e40af}/* Resume */
-.resume-section{
-  color:#111827;
-}
-.resume-header h1{
-  margin:0;
-  font-size:26px;
-  text-align:center;
-}
-.resume-header p{
-  margin:4px 0;
-  font-size:14px;
-  text-align:center;
-}
-.resume-block{
-  margin-top:15px;
-}
-.resume-block h3{
-  margin-bottom:5px;
-  color:#2563eb;
-}
+    .btn.ghost{
+      background:transparent;
+      color:var(--accent-600);
+      border:1px solid rgba(37,99,235,0.12);
+    }
+    .actions{display:flex; gap:10px; flex-wrap:wrap}
 
-@media(max-width:900px){
-  .container{grid-template-columns:1fr}
-}
+    small.help{display:block; margin-top:8px; color:var(--muted)}
 
-@media print{
-  body{background:#fff}
-  .form-section,header,button{display:none}
-  .resume-section{box-shadow:none}
-}
+    /* Right: Resume preview */
+    .preview{
+      background: linear-gradient(180deg,#fff,#fbfdff);
+      border-radius:var(--radius);
+      padding:20px;
+      box-shadow: var(--surface-shadow);
+      height:100%;
+      overflow:auto;
+    }
 
+    .paper{
+      background:#fff;
+      padding:20px;
+      border-radius:8px;
+      border:1px solid #eef2f8;
+    }
+
+    .r-header{
+      text-align:center;
+      margin-bottom:12px;
+    }
+    .r-name{
+      font-size:20px;
+      font-weight:700;
+      margin:0;
+    }
+    .r-contact{font-size:13px; color:var(--muted); margin:6px 0 0 0}
+
+    .section{
+      margin-top:14px;
+    }
+    .section h3{
+      margin:0 0 8px 0;
+      font-size:14px;
+      color:var(--accent-600);
+      letter-spacing:0.2px;
+    }
+    .section p, .section ul{margin:0; color:#111827; font-size:13px; line-height:1.4}
+    ul.simple{padding-left:18px}
+
+    /* Experience / project items inside preview */
+    .item-title{font-weight:700; font-size:13px}
+    .item-sub{font-size:12px; color:var(--muted)}
+
+    /* Controls for add/remove */
+    .inline-controls{display:flex; gap:8px; margin-top:8px; flex-wrap:wrap}
+
+    /* Footer */
+    footer.app-footer{
+      margin-top:18px;
+      text-align:center;
+      color:var(--muted);
+      font-size:13px;
+      padding:12px 10px;
+      border-radius:10px;
+      background:linear-gradient(180deg, rgba(255,255,255,0.6), rgba(255,255,255,0.4));
+    }
+    footer.app-footer a{color:var(--accent); text-decoration:none; margin:0 8px;}
+
+    /* Responsive */
+    @media (max-width:980px){
+      .grid{grid-template-columns: 1fr}
+      .preview{order:2}
+    }
+
+    /* Print */
+    @media print{
+      body{background:#fff; padding:0}
+      header.app-header, .btn, .actions, .panel .add-btn, .panel .remove-btn{display:none !important}
+      .grid{grid-template-columns:1fr}
+      .preview{box-shadow:none; border-radius:0; padding:0}
+      .paper{border:0; padding:0}
+      footer.app-footer{display:none}
+    }
   </style>
 </head>
 <body>
-<header>
-  <h1>Professional Resume Builder</h1>
-  <p>ATS-friendly resume</p>
-</header><div class="container">
-  <!-- FORM -->
-  <div class="form-section">
-    <h2>Personal Details</h2>
-    <label>Full Name *</label>
-    <input id="name" required><label>Email *</label>
-<input id="email" type="email" required>
+  <div class="wrap">
+    <header class="app-header">
+      <div>
+        <div class="brand">Professional Resume Builder</div>
+        <div class="subtitle">ATS-friendly • Live preview • Print-ready</div>
+      </div>
+    </header>
 
-<label>Phone *</label>
-<input id="phone" required>
+    <div class="grid">
+      <!-- FORM PANEL -->
+      <div class="panel" aria-label="Resume form">
+        <h2 class="section-title">Personal Details</h2>
+        <p class="section-desc">Fill in your basic information. Preview updates live.</p>
 
-<label>City *</label>
-<input id="city" required>
+        <label for="name">Full name</label>
+        <input id="name" type="text" placeholder="Jane Doe" />
 
-<h2>Professional Summary</h2>
-<label>Summary *</label>
-<textarea id="summary" rows="4" required></textarea>
+        <div class="row">
+          <div class="col">
+            <label for="email">Email</label>
+            <input id="email" type="email" placeholder="jane@example.com" />
+          </div>
+          <div class="col">
+            <label for="phone">Phone</label>
+            <input id="phone" type="text" placeholder="+1 555 555 555" />
+          </div>
+        </div>
 
-<h2>Education</h2>
-<label>Degree / Course *</label>
-<input id="degree" required>
+        <label for="city">Location (City, Country)</label>
+        <input id="city" type="text" placeholder="San Francisco, CA" />
 
-<label>Institute *</label>
-<input id="college" required>
+        <h2 class="section-title" style="margin-top:16px">Professional Summary</h2>
+        <label for="summary">Summary</label>
+        <textarea id="summary" placeholder="A concise summary that highlights your strengths and career goals."></textarea>
 
-<label>Year *</label>
-<input id="year" required>
+        <h2 class="section-title" style="margin-top:16px">Education</h2>
+        <div class="row">
+          <div class="col">
+            <label for="degree">Degree / Course</label>
+            <input id="degree" type="text" placeholder="B.Sc. Computer Science" />
+          </div>
+          <div class="col">
+            <label for="year">Year</label>
+            <input id="year" type="text" placeholder="2020" />
+          </div>
+        </div>
+        <label for="college">Institute</label>
+        <input id="college" type="text" placeholder="University of Example" />
 
-<h2>Skills</h2>
-<label>Technical & Soft Skills *</label>
-<textarea id="skills" rows="3" placeholder="Java, Python, Communication" required></textarea>
+        <h2 class="section-title" style="margin-top:16px">Skills</h2>
+        <label for="skills">Technical & soft skills (comma separated)</label>
+        <textarea id="skills" placeholder="JavaScript, React, Python, Communication"></textarea>
+        <small class="help">Tip: Use commas to separate skills.</small>
 
-<h2>Experience / Internship</h2>
-<label>Role & Company *</label>
-<input id="role" required>
+        <h2 class="section-title" style="margin-top:16px">Experience / Internship</h2>
+        <div id="experience-list">
+          <div class="exp-item" data-index="0">
+            <label>Role & Company</label>
+            <input class="role" type="text" placeholder="Frontend Developer — ACME Corp" />
+            <label>Description (brief)</label>
+            <textarea class="experience" placeholder="Built responsive interfaces and improved performance by 20%"></textarea>
+            <div class="inline-controls">
+              <button type="button" class="btn ghost add-btn" onclick="addExperience()">+ Add experience</button>
+            </div>
+          </div>
+        </div>
 
-<label>Description *</label>
-<textarea id="experience" rows="4" required></textarea>
+        <h2 class="section-title" style="margin-top:16px">Projects</h2>
+        <div id="project-list">
+          <div class="proj-item" data-index="0">
+            <label>Project title</label>
+            <input class="projectTitle" type="text" placeholder="Resume Builder App" />
+            <label>Project description</label>
+            <textarea class="projectDesc" placeholder="A web app to create printable, ATS-friendly resumes"></textarea>
+            <div class="inline-controls">
+              <button type="button" class="btn ghost add-btn" onclick="addProject()">+ Add project</button>
+            </div>
+          </div>
+        </div>
 
-<h2>Projects</h2>
-<label>Project Title *</label>
-<input id="projectTitle" required>
+        <div class="actions" style="margin-top:18px">
+          <button class="btn" onclick="downloadResume()">Download Resume (PDF)</button>
+          <button class="btn ghost" onclick="resetForm()">Reset</button>
+        </div>
+        <small style="display:block; margin-top:10px" class="muted">All fields are optional; preview will show available fields. For best results, include at least one experience and one project.</small>
+      </div>
 
-<label>Project Description *</label>
-<textarea id="projectDesc" rows="4" required></textarea>
+      <!-- PREVIEW PANEL -->
+      <aside class="preview" aria-label="Resume preview">
+        <div class="paper" id="resume">
+          <div class="r-header">
+            <h1 id="r-name" class="r-name">Your Name</h1>
+            <div id="r-contact" class="r-contact">email | phone | city</div>
+          </div>
 
-<button onclick="generateResume()">Generate Resume</button>
-<button onclick="downloadResume()">Download Resume (PDF)</button>
+          <div id="preview-summary" class="section" style="display:none">
+            <h3>Professional Summary</h3>
+            <p id="r-summary"></p>
+          </div>
 
-  </div>  <!-- RESUME PREVIEW -->  <div class="resume-section" id="resume">
-    <div class="resume-header">
-      <h1 id="r-name">Your Name</h1>
-      <p id="r-contact"></p>
-    </div><div class="resume-block">
-  <h3>Professional Summary</h3>
-  <p id="r-summary"></p>
-</div>
+          <div id="preview-education" class="section" style="display:none">
+            <h3>Education</h3>
+            <p id="r-education"></p>
+          </div>
 
-<div class="resume-block">
-  <h3>Education</h3>
-  <p id="r-education"></p>
-</div>
+          <div id="preview-skills" class="section" style="display:none">
+            <h3>Skills</h3>
+            <p id="r-skills"></p>
+          </div>
 
-<div class="resume-block">
-  <h3>Skills</h3>
-  <p id="r-skills"></p>
-</div>
+          <div id="preview-experience" class="section" style="display:none">
+            <h3>Experience</h3>
+            <div id="r-experience"></div>
+          </div>
 
-<div class="resume-block">
-  <h3>Experience</h3>
-  <p id="r-experience"></p>
-</div>
+          <div id="preview-projects" class="section" style="display:none">
+            <h3>Projects</h3>
+            <div id="r-project"></div>
+          </div>
+        </div>
+      </aside>
+    </div>
 
-<div class="resume-block">
-  <h3>Projects</h3>
-  <p id="r-project"></p>
-</div>
-
+    <!-- Footer: copyright and links moved here -->
+    <footer class="app-footer" role="contentinfo">
+      © 2026 Professional Resume Builder | All Rights Reserved | Developed by DeveloperWala..
+      <div style="margin-top:6px">
+        <a href="#" onclick="openTerms(); return false;">Terms & Conditions</a> |
+        <a href="#" onclick="openPrivacy(); return false;">Privacy Policy</a>
+      </div>
+    </footer>
   </div>
-</div><footer style="text-align:center; padding:15px; background:#0f172a; color:#fff; font-size:14px;">
-  © 2026 Professional Resume Builder | All Rights Reserved | Developed by Mrhacker<br>
-  <a href="#" onclick="openTerms()" style="color:#93c5fd; margin:0 8px;">Terms & Conditions</a> |
-  <a href="#" onclick="openPrivacy()" style="color:#93c5fd; margin:0 8px;">Privacy Policy</a>
-</footer><!-- MODALS --><div id="termsModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,.6);">
-  <div style="background:#fff; max-width:700px; margin:60px auto; padding:20px; border-radius:8px;">
-    <h2>Terms & Conditions</h2>
-    <p>This Resume Builder is created for educational and professional use. Users are responsible for the accuracy of the information entered. The application does not guarantee job placement and is provided as-is.</p>
-    <button onclick="closeModals()">Close</button>
+
+  <!-- Modals for Terms & Privacy (hidden by default) -->
+  <div id="termsModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,.6); z-index:1300;">
+    <div style="background:#fff; max-width:760px; margin:60px auto; padding:20px; border-radius:8px;">
+      <h2>Terms & Conditions</h2>
+      <p>
+        This Resume Builder is created for educational and professional use. Users are responsible for the accuracy of the information entered.
+        The application does not guarantee job placement and is provided "as is" without warranties. Use responsibly and review your personal data before sharing.
+      </p>
+      <div style="text-align:right; margin-top:12px;">
+        <button class="btn ghost" onclick="closeModals()">Close</button>
+      </div>
+    </div>
   </div>
-</div><div id="privacyModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,.6);">
-  <div style="background:#fff; max-width:700px; margin:60px auto; padding:20px; border-radius:8px;">
-    <h2>Privacy Policy</h2>
-    <p>Your data is used only for resume generation and preview. No personal data is shared with third parties. This project is intended for academic demonstration purposes.</p>
-    <button onclick="closeModals()">Close</button>
+
+  <div id="privacyModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,.6); z-index:1300;">
+    <div style="background:#fff; max-width:760px; margin:60px auto; padding:20px; border-radius:8px;">
+      <h2>Privacy Policy</h2>
+      <p>
+        Your data is used only for resume generation and preview in the browser. No personal data is shared with third parties by this demo project.
+        If integrated with a backend, please review that backend's privacy practices separately.
+      </p>
+      <div style="text-align:right; margin-top:12px;">
+        <button class="btn ghost" onclick="closeModals()">Close</button>
+      </div>
+    </div>
   </div>
-</div><script>
-  function generateResume(){
-    const fields=[
-      'name','email','phone','city','summary','degree','college','year','skills','role','experience','projectTitle','projectDesc'
-    ];
-    for(let f of fields){
-      if(!document.getElementById(f).value){
-        alert('All fields are mandatory');
-        return;
+
+  <script>
+    // Utility to create elements from HTML
+    function createEl(tag, attrs = {}, children = []) {
+      const el = document.createElement(tag);
+      for (const k in attrs) {
+        if (k === 'class') el.className = attrs[k];
+        else if (k === 'html') el.innerHTML = attrs[k];
+        else el.setAttribute(k, attrs[k]);
       }
+      children.forEach(c => el.appendChild(c));
+      return el;
     }
 
-    document.getElementById('r-name').innerText = name.value;
-    document.getElementById('r-contact').innerText = email.value+' | '+phone.value+' | '+city.value;
-    document.getElementById('r-summary').innerText = summary.value;
-    document.getElementById('r-education').innerText = degree.value+' - '+college.value+' ('+year.value+')';
-    document.getElementById('r-skills').innerText = skills.value;
-    document.getElementById('r-experience').innerText = role.value+' : '+experience.value;
-    document.getElementById('r-project').innerText = projectTitle.value+' : '+projectDesc.value;
-  }
+    // Live preview sync
+    const fields = {
+      name: document.getElementById('name'),
+      email: document.getElementById('email'),
+      phone: document.getElementById('phone'),
+      city: document.getElementById('city'),
+      summary: document.getElementById('summary'),
+      degree: document.getElementById('degree'),
+      college: document.getElementById('college'),
+      year: document.getElementById('year'),
+      skills: document.getElementById('skills')
+    };
 
-  function openTerms(){document.getElementById('termsModal').style.display='block';}
-  function openPrivacy(){document.getElementById('privacyModal').style.display='block';}
-  function closeModals(){
-    document.getElementById('termsModal').style.display='none';
-    document.getElementById('privacyModal').style.display='none';
-  }
+    // Handlers for dynamic lists
+    function addExperience() {
+      const list = document.getElementById('experience-list');
+      const idx = list.querySelectorAll('.exp-item').length;
+      const item = createEl('div', {class: 'exp-item', 'data-index': idx});
+      item.innerHTML = `
+        <label>Role & Company</label>
+        <input class="role" type="text" placeholder="Frontend Developer — Company" />
+        <label>Description (brief)</label>
+        <textarea class="experience" placeholder="What you did — achievements & tech used"></textarea>
+        <div class="inline-controls">
+          <button type="button" class="btn ghost remove-btn" onclick="removeNode(this)">− Remove</button>
+          <button type="button" class="btn ghost add-btn" onclick="addExperience()">+ Add</button>
+        </div>
+      `;
+      list.appendChild(item);
+      attachListListeners();
+    }
 
-  function downloadResume(){
-    generateResume();
-    window.print();
-  }
-</script></body>
-                    </html>
+    function addProject() {
+      const list = document.getElementById('project-list');
+      const idx = list.querySelectorAll('.proj-item').length;
+      const item = createEl('div', {class: 'proj-item', 'data-index': idx});
+      item.innerHTML = `
+        <label>Project title</label>
+        <input class="projectTitle" type="text" placeholder="Project name" />
+        <label>Project description</label>
+        <textarea class="projectDesc" placeholder="Short description and tech used"></textarea>
+        <div class="inline-controls">
+          <button type="button" class="btn ghost remove-btn" onclick="removeNode(this)">− Remove</button>
+          <button type="button" class="btn ghost add-btn" onclick="addProject()">+ Add</button>
+        </div>
+      `;
+      list.appendChild(item);
+      attachListListeners();
+    }
+
+    function removeNode(btn){
+      const container = btn.closest('.exp-item') || btn.closest('.proj-item');
+      if(container) container.remove();
+      updatePreview();
+    }
+
+    function attachListListeners(){
+      // experience inputs
+      document.querySelectorAll('.role, .experience, .projectTitle, .projectDesc').forEach(inp=>{
+        inp.oninput = updatePreview;
+      });
+    }
+
+    // initial attach
+    Object.values(fields).forEach(f => f && (f.oninput = updatePreview));
+    attachListListeners();
+
+    function updatePreview(){
+      // Header
+      const name = fields.name.value.trim();
+      const email = fields.email.value.trim();
+      const phone = fields.phone.value.trim();
+      const city = fields.city.value.trim();
+
+      document.getElementById('r-name').innerText = name || 'Your Name';
+      const contactParts = [];
+      if(email) contactParts.push(email);
+      if(phone) contactParts.push(phone);
+      if(city) contactParts.push(city);
+      document.getElementById('r-contact').innerText = contactParts.join(' • ') || 'email • phone • city';
+
+      // Summary
+      const summary = fields.summary.value.trim();
+      document.getElementById('r-summary').innerText = summary;
+      document.getElementById('preview-summary').style.display = summary ? 'block' : 'none';
+
+      // Education
+      const degree = fields.degree.value.trim();
+      const college = fields.college.value.trim();
+      const year = fields.year.value.trim();
+      const eduText = [degree, college ? ('— ' + college) : '', year ? ('(' + year + ')') : ''].filter(Boolean).join(' ');
+      document.getElementById('r-education').innerText = eduText;
+      document.getElementById('preview-education').style.display = eduText ? 'block' : 'none';
+
+      // Skills
+      const skills = fields.skills.value.trim();
+      document.getElementById('r-skills').innerText = skills;
+      document.getElementById('preview-skills').style.display = skills ? 'block' : 'none';
+
+      // Experiences
+      const expContainer = document.getElementById('r-experience');
+      expContainer.innerHTML = '';
+      const expItems = document.querySelectorAll('.exp-item');
+      expItems.forEach(it=>{
+        const role = it.querySelector('.role')?.value.trim();
+        const desc = it.querySelector('.experience')?.value.trim();
+        if(role || desc){
+          const el = createEl('div');
+          const title = createEl('div', {class: 'item-title', html: role || ''});
+          const sub = createEl('div', {class: 'item-sub', html: desc || ''});
+          el.appendChild(title);
+          el.appendChild(sub);
+          el.style.marginBottom = '10px';
+          expContainer.appendChild(el);
+        }
+      });
+      document.getElementById('preview-experience').style.display = expContainer.childElementCount ? 'block' : 'none';
+
+      // Projects
+      const projContainer = document.getElementById('r-project');
+      projContainer.innerHTML = '';
+      const projItems = document.querySelectorAll('.proj-item');
+      projItems.forEach(it=>{
+        const title = it.querySelector('.projectTitle')?.value.trim();
+        const desc = it.querySelector('.projectDesc')?.value.trim();
+        if(title || desc){
+          const el = createEl('div');
+          const t = createEl('div', {class: 'item-title', html: title || ''});
+          const s = createEl('div', {class: 'item-sub', html: desc || ''});
+          el.appendChild(t);
+          el.appendChild(s);
+          el.style.marginBottom = '10px';
+          projContainer.appendChild(el);
+        }
+      });
+      document.getElementById('preview-projects').style.display = projContainer.childElementCount ? 'block' : 'none';
+    }
+
+    function resetForm(){
+      if(!confirm('Reset all fields?')) return;
+      document.querySelectorAll('input[type="text"], input[type="email"], textarea').forEach(i=>{
+        i.value = '';
+      });
+      // remove dynamic extra items
+      document.querySelectorAll('.exp-item').forEach((el, idx) => { if(idx>0) el.remove(); });
+      document.querySelectorAll('.proj-item').forEach((el, idx) => { if(idx>0) el.remove(); });
+      updatePreview();
+    }
+
+    function collectAndValidate(){
+      // Basic client-side validation: ensure name at least
+      const name = fields.name.value.trim();
+      if(!name){
+        if(!confirm('Your resume has no name. Continue anyway?')) return false;
+      }
+      return true;
+    }
+
+    function downloadResume(){
+      if(!collectAndValidate()) return;
+      // before printing, ensure preview is updated
+      updatePreview();
+      // Trigger print (user can save as PDF)
+      window.print();
+    }
+
+    // Modal handlers
+    function openTerms(){
+      document.getElementById('termsModal').style.display = 'block';
+    }
+    function openPrivacy(){
+      document.getElementById('privacyModal').style.display = 'block';
+    }
+    function closeModals(){
+      document.getElementById('termsModal').style.display = 'none';
+      document.getElementById('privacyModal').style.display = 'none';
+    }
+
+    // Initial preview update
+    updatePreview();
+  </script>
+
+</body>
+            </html>
