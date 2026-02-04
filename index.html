@@ -173,8 +173,22 @@
 
   </div>
 </div><footer style="text-align:center; padding:15px; background:#0f172a; color:#fff; font-size:14px;">
-  © 2026 Professional Resume Builder | All Rights Reserved | Developed by DeveloperWala....
-</footer><script>
+  © 2026 Professional Resume Builder | All Rights Reserved | Developed by Mrhacker<br>
+  <a href="#" onclick="openTerms()" style="color:#93c5fd; margin:0 8px;">Terms & Conditions</a> |
+  <a href="#" onclick="openPrivacy()" style="color:#93c5fd; margin:0 8px;">Privacy Policy</a>
+</footer><!-- MODALS --><div id="termsModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,.6);">
+  <div style="background:#fff; max-width:700px; margin:60px auto; padding:20px; border-radius:8px;">
+    <h2>Terms & Conditions</h2>
+    <p>This Resume Builder is created for educational and professional use. Users are responsible for the accuracy of the information entered. The application does not guarantee job placement and is provided as-is.</p>
+    <button onclick="closeModals()">Close</button>
+  </div>
+</div><div id="privacyModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,.6);">
+  <div style="background:#fff; max-width:700px; margin:60px auto; padding:20px; border-radius:8px;">
+    <h2>Privacy Policy</h2>
+    <p>Your data is used only for resume generation and preview. No personal data is shared with third parties. This project is intended for academic demonstration purposes.</p>
+    <button onclick="closeModals()">Close</button>
+  </div>
+</div><script>
   function generateResume(){
     const fields=[
       'name','email','phone','city','summary','degree','college','year','skills','role','experience','projectTitle','projectDesc'
@@ -195,9 +209,16 @@
     document.getElementById('r-project').innerText = projectTitle.value+' : '+projectDesc.value;
   }
 
+  function openTerms(){document.getElementById('termsModal').style.display='block';}
+  function openPrivacy(){document.getElementById('privacyModal').style.display='block';}
+  function closeModals(){
+    document.getElementById('termsModal').style.display='none';
+    document.getElementById('privacyModal').style.display='none';
+  }
+
   function downloadResume(){
     generateResume();
     window.print();
   }
 </script></body>
-</html>
+                    </html>
