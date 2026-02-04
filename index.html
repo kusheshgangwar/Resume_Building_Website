@@ -559,7 +559,7 @@
       updatePreview();
 
       // Gather head styles (style tags and stylesheet links) to include in print window
-      const headNodes = Array.from(document.head.querySelectorAll('link[rel="stylesheet"], style, link[href*="fonts.googleapis.com"]'));
+      const headNodes = Array.from(document.head.querySelectorAll('style, link[rel="stylesheet"], link[href*="fonts.googleapis.com"]'));
       const headHtml = headNodes.map(n => n.outerHTML).join('\n');
 
       const resumeHtml = document.getElementById('resume').outerHTML;
@@ -593,14 +593,29 @@
       w.document.open();
       w.document.write(html);
       w.document.close();
-      w.focus();
 
-      // Delay slightly to allow fonts/styles to load in the new window, then print and close
-      setTimeout(() => {
-        w.print();
-        // Closing is optional; some browsers prevent it. Attempt to close.
-        try { w.close(); } catch (e) { /* ignore */ }
-      }, 600);
+      // Poll until the new window's document is fully loaded, then print
+      const maxWait = 7000; // max wait 7s
+      const start = Date.now();
+      const interval = setInterval(() => {
+        try {
+          const ready = w.document.readyState;
+          if (ready === 'complete' || Date.now() - start > maxWait) {
+            clearInterval(interval);
+            setTimeout(() => {
+              try { w.focus(); } catch(e){}
+              try { w.print(); } catch(e){ alert('Print failed: ' + (e && e.message ? e.message : e)); }
+              try { w.close(); } catch(e){}
+            }, 300);
+          }
+        } catch (e) {
+          // Accessing w.document can throw if popup was blocked later; ignore until timeout
+          if (Date.now() - start > maxWait) {
+            clearInterval(interval);
+            alert('Could not access print window. Popup might be blocked.');
+          }
+        }
+      }, 150);
     }
 
     // Modal handlers
@@ -620,4 +635,4 @@
   </script>
 
 </body>
-          </html>
+  </html>
